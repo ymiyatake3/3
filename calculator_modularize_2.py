@@ -87,8 +87,8 @@ def isOperator(token):
         return True
 
 
-
-def canCalculate(tokens):
+# Check if the tokens are in correct order (number and operator take turns)
+def checkTokenOrder(tokens):
     
     # If the first token is '-'
     if getType(tokens[0]) == 'MINUS':
@@ -129,10 +129,10 @@ def evaluate(tokens):
     index = 1
     while index < len(tokens):
         type = getType(tokens[index])
-        if (type == 'TIMES' or type == 'DIVIDE') and canCalculate(tokens, index):
+        if type == 'TIMES' or type == 'DIVIDE':
             # Calculate
-            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1])
-            
+            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
+                               
             # Delete the calculated part (ex: 2, *, 3)
             del tokens[index - 1 : index + 1]
                 
@@ -145,7 +145,7 @@ def evaluate(tokens):
     index = 1
     while index < len(tokens):
         type = getType(tokens[index])
-        if (type == 'PLUS' or type == 'MINUS') and canCalculate(tokens, index):
+        if type == 'PLUS' or type == 'MINUS':
             ans += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
 
         index = lookNext(index)
