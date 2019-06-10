@@ -93,8 +93,6 @@ def canCalculate(tokens, index):
 
 def calculate(operator, num1, num2):
     result = 0
-    num1 = tokens[index - 1]['number']
-    num2 = tokens[index + 1]['number']
     
     if (operator == 'PLUS') {
         result = num1 + num2
@@ -108,8 +106,14 @@ def calculate(operator, num1, num2):
 
     return result
 
+def getType(tokens, index):
+    return tokens[index]['type']
 
-# Calculation
+def getNumber(tokens, number):
+    return tokens[index]['number']
+
+
+# Calculation'
 def evaluate(tokens):
     answer = 0
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -117,23 +121,19 @@ def evaluate(tokens):
     # Multiplication and division
     index = 1
     while index < len(tokens):
-            if tokens[index]['type'] == 'TIMES':
-                # Calculate
-                result = tokens[index - 1]['number'] * tokens[index + 1]['number']
-                
-                # Delete the calculated part (ex: 2, *, 3)
-                del tokens[index - 1 : index + 1]
-                
-                # Insert the result instead (ex: 6)
-                tokens.insert(index - 1, setNumToken(result))
+        type = getType(tokens, index)
+        if (type == 'TIMES' || type == 'DIVIDE') && canCalculate(tokens, index):
+            # Calculate
+            result = calculate(type, getNumber(tokens, index - 1), getNumber(tokens, index + 1))
             
-            elif tokens[index]['type'] == 'DIVIDE':
-                result = tokens[index - 1]['number'] / tokens[index + 1]['number']
-                del tokens[index - 1 : index + 1]
-                tokens.insert(index - 1, setNumToken(result))
+            # Delete the calculated part (ex: 2, *, 3)
+            del tokens[index - 1 : index + 1]
+                
+            # Insert the result instead (ex: 6)
+            tokens.insert(index - 1, setNumToken(result))
             
-            else:
-                index = lookNext(index)
+        else:
+            index = lookNext(index)
 
     # Addition and subtraction
     index = 1
