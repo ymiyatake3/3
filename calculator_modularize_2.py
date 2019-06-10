@@ -75,7 +75,6 @@ def tokenize(line):
     # Check the order error
     checkTokenOrder(tokens)
 
-    print(token)
     return tokens
 
 def getType(token):
@@ -104,6 +103,7 @@ def checkTokenOrder(tokens):
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
             print('Input Error: There are operators next to each other.')
             exit(1)
+        index = lookNext(index)
 
     # If the last token is operator
     if isOperator(len(tokens) - 1):
@@ -160,13 +160,13 @@ def evaluate(tokens):
 
 # Return if the calculated answer is true or false
 def test(line):
-  tokens = tokenize(line)
-  actualAnswer = evaluate(tokens)
-  expectedAnswer = eval(line)
-  if abs(actualAnswer - expectedAnswer) < 1e-8:
-    print("PASS! (%s = %f)" % (line, expectedAnswer))
-  else:
-    print("FAIL! (%s should be %f but was %f)" % (line, expectedAnswer, actualAnswer))
+    tokens = tokenize(line)
+    actualAnswer = evaluate(tokens)
+    expectedAnswer = eval(line)
+    if abs(actualAnswer - expectedAnswer) < 1e-8:
+        print("PASS! (%s = %f)" % (line, expectedAnswer))
+    else:
+        print("FAIL! (%s should be %f but was %f)" % (line, expectedAnswer, actualAnswer))
 
 
 # Add more tests to this function :)
