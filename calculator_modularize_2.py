@@ -31,7 +31,7 @@ def readNumber(line, index):
             keta /= 10
             index = lookNext(index)
 
-    # Set the token type in the token dictionary
+    # Set the token type
     token = setNumToken(number)
     return token, index
 
@@ -96,7 +96,7 @@ def canCalculate(tokens):
         tokens.insert(0, setNumToken(0))
 
     while index < len(tokens) - 1:
-        if isOperator(tokens[index]) == isOperator(tokens[index + 1])
+        if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
             print('Input Error: There are operators next to each other.')
             exit(1)
 
@@ -105,19 +105,17 @@ def canCalculate(tokens):
         print('Input Error: This formula ends with operator.')
         exit(1)
 
-
 def calculate(operator, num1, num2):
     result = 0
     
-    if operator == 'PLUS' {
+    if operator == 'PLUS':
         result = num1 + num2
-    } elif operator == 'MINUS' {
+    elif operator == 'MINUS':
         result = num1 - num2
-    } elif operator == 'TIMES' {
+    elif operator == 'TIMES':
         result = num1 * num2
-    } elif operator == 'DIVID' {
+    elif operator == 'DIVID':
         result = num1 / num2
-    }
 
     return result
 
@@ -131,7 +129,7 @@ def evaluate(tokens):
     index = 1
     while index < len(tokens):
         type = getType(tokens[index])
-        if (type == 'TIMES' || type == 'DIVIDE') && canCalculate(tokens, index):
+        if (type == 'TIMES' or type == 'DIVIDE') and canCalculate(tokens, index):
             # Calculate
             result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1])
             
@@ -147,7 +145,7 @@ def evaluate(tokens):
     index = 1
     while index < len(tokens):
         type = getType(tokens[index])
-        if (type == 'PLUS' || type == 'MINUS') && canCalculate(tokens, index):
+        if (type == 'PLUS' or type == 'MINUS') and canCalculate(tokens, index):
             ans += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
 
         index = lookNext(index)
