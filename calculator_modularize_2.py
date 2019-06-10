@@ -75,6 +75,7 @@ def tokenize(line):
     #print(tokens)
     return tokens
 
+
 def canCalculate(tokens, index):
     operator = tokens[index - 1]['type']
     
@@ -113,7 +114,7 @@ def getNumber(tokens, number):
     return tokens[index]['number']
 
 
-# Calculation'
+# Calculation
 def evaluate(tokens):
     answer = 0
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -131,18 +132,15 @@ def evaluate(tokens):
                 
             # Insert the result instead (ex: 6)
             tokens.insert(index - 1, setNumToken(result))
-            
         else:
             index = lookNext(index)
 
     # Addition and subtraction
     index = 1
     while index < len(tokens):
-        if tokens[index]['type'] == 'NUMBER':
-            if tokens[index - 1]['type'] == 'PLUS':
-                answer += tokens[index]['number']
-            elif tokens[index - 1]['type'] == 'MINUS':
-                answer -= tokens[index]['number']
+        type = getType(tokens, index)
+        if (type == 'PLUS' || type == 'MINUS') && canCalculate(tokens, index):
+            ans += calculate(type, getNumber(tokens, index - 1), getNumber(tokens, index + 1))
 
         index = lookNext(index)
 
