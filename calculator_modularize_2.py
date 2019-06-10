@@ -97,6 +97,11 @@ def checkTokenOrder(tokens):
     if getType(tokens[0]) == 'MINUS':
         # Insert 0 befere the '-'
         tokens.insert(0, setNumToken(0))
+    
+    # If the input is number only
+    if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
+        tokens.append(setToken('PLUS'))
+        tokens.append(setNumToken(0))
 
     index = 0
     while index < len(tokens) - 1:
