@@ -75,8 +75,38 @@ def tokenize(line):
     #print(tokens)
     return tokens
 
-def calculate(type, tokens):
-    tokens[index - 1]['number'] * tokens[index + 1]['number']
+def canCalculate(tokens, index):
+    operator = tokens[index - 1]['type']
+    
+    if (len(tokens) > index + 1):
+        if (operator == 'PLUS' || operator == 'MINUS'):
+            # If the next token is number
+            if (tokens[index + 1]['type'] == 'NUMBER'):
+                return True
+        elif(operator == 'TIMES' || operator == 'DIVIDE')
+            # If both of the side tokens are number
+            if (tokens[index - 1]['type'] == 'NUMBER' && tokens[index + 1]['type'] == 'NUMBER'):
+                return True
+    
+    return False
+
+
+def calculate(operator, num1, num2):
+    result = 0
+    num1 = tokens[index - 1]['number']
+    num2 = tokens[index + 1]['number']
+    
+    if (operator == 'PLUS') {
+        result = num1 + num2
+    } elif (operator == 'MINUS') {
+        result = num1 - num2
+    } elif (operator == 'TIMES') {
+        result = num1 * num2
+    } elif (operator == 'DIVID') {
+        result = num1 / num2
+    }
+
+    return result
 
 
 # Calculation
@@ -91,7 +121,7 @@ def evaluate(tokens):
                 # Calculate
                 result = tokens[index - 1]['number'] * tokens[index + 1]['number']
                 
-                # Delete the calculated part (ex: 2*3)
+                # Delete the calculated part (ex: 2, *, 3)
                 del tokens[index - 1 : index + 1]
                 
                 # Insert the result instead (ex: 6)
@@ -111,7 +141,6 @@ def evaluate(tokens):
         if tokens[index]['type'] == 'NUMBER':
             if tokens[index - 1]['type'] == 'PLUS':
                 answer += tokens[index]['number']
-            
             elif tokens[index - 1]['type'] == 'MINUS':
                 answer -= tokens[index]['number']
 
