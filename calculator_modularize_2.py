@@ -106,7 +106,7 @@ def checkTokenOrder(tokens):
         index = lookNext(index)
 
     # If the last token is operator
-    if isOperator(len(tokens) - 1):
+    if isOperator(tokens[len(tokens) - 1]):
         print('Input Error: This formula ends with operator.')
         exit(1)
 
@@ -128,10 +128,9 @@ def calculate(operator, num1, num2):
 # Get the answer from the list of tokens
 def evaluate(tokens):
     answer = 0
-    tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     
     # Multiplication and division
-    index = 1
+    index = 0
     while index < len(tokens):
         type = getType(tokens[index])
         if type == 'TIMES' or type == 'DIVIDE':
@@ -147,11 +146,12 @@ def evaluate(tokens):
             index = lookNext(index)
 
     # Addition and subtraction
-    index = 1
+    index = 0
     while index < len(tokens):
         type = getType(tokens[index])
         if type == 'PLUS' or type == 'MINUS':
-            ans += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
+            answer += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
+
 
         index = lookNext(index)
 
