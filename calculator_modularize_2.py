@@ -71,7 +71,11 @@ def tokenize(line):
             print('Invalid character found: ' + line[index])
             exit(1)
         tokens.append(token)
+    
+    # Check the order error
+    checkTokenOrder(tokens)
 
+    print(token)
     return tokens
 
 def getType(token):
@@ -95,6 +99,7 @@ def checkTokenOrder(tokens):
         # Insert 0 befere the '-'
         tokens.insert(0, setNumToken(0))
 
+    index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
             print('Input Error: There are operators next to each other.')
