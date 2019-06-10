@@ -72,49 +72,57 @@ def tokenize(line):
             exit(1)
         tokens.append(token)
 
-    #print(tokens)
     return tokens
 
+def getType(token):
+    return token['type']
 
-def canCalculate(tokens, index):
-    operator = tokens[index - 1]['type']
+def getNumber(token):
+    return token['number']
+
+def isOperator(token):
+    if token['type'] == 'NUMBER':
+        return False
+    else:
+        return True
+
+
+
+def canCalculate(tokens):
     
-    if (len(tokens) > index + 1):
-        if (operator == 'PLUS' || operator == 'MINUS'):
-            # If the next token is number
-            if (tokens[index + 1]['type'] == 'NUMBER'):
-                return True
-        elif(operator == 'TIMES' || operator == 'DIVIDE')
-            # If both of the side tokens are number
-            if (tokens[index - 1]['type'] == 'NUMBER' && tokens[index + 1]['type'] == 'NUMBER'):
-                return True
-    
-    return False
+    # If the first token is '-'
+    if getType(tokens[0]) == 'MINUS':
+        # Insert 0 befere the '-'
+        tokens.insert(0, setNumToken(0))
+
+    while index < len(tokens) - 1:
+        if isOperator(tokens[index]) == isOperator(tokens[index + 1])
+            print('Input Error: There are operators next to each other.')
+            exit(1)
+
+    # If the last token is operator
+    if isOperator(len(tokens) - 1):
+        print('Input Error: This formula ends with operator.')
+        exit(1)
 
 
 def calculate(operator, num1, num2):
     result = 0
     
-    if (operator == 'PLUS') {
+    if operator == 'PLUS' {
         result = num1 + num2
-    } elif (operator == 'MINUS') {
+    } elif operator == 'MINUS' {
         result = num1 - num2
-    } elif (operator == 'TIMES') {
+    } elif operator == 'TIMES' {
         result = num1 * num2
-    } elif (operator == 'DIVID') {
+    } elif operator == 'DIVID' {
         result = num1 / num2
     }
 
     return result
 
-def getType(tokens, index):
-    return tokens[index]['type']
 
-def getNumber(tokens, number):
-    return tokens[index]['number']
-
-
-# Calculation
+# Get the answer from the list of tokens
 def evaluate(tokens):
     answer = 0
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -122,10 +130,10 @@ def evaluate(tokens):
     # Multiplication and division
     index = 1
     while index < len(tokens):
-        type = getType(tokens, index)
+        type = getType(tokens[index])
         if (type == 'TIMES' || type == 'DIVIDE') && canCalculate(tokens, index):
             # Calculate
-            result = calculate(type, getNumber(tokens, index - 1), getNumber(tokens, index + 1))
+            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1])
             
             # Delete the calculated part (ex: 2, *, 3)
             del tokens[index - 1 : index + 1]
@@ -138,9 +146,9 @@ def evaluate(tokens):
     # Addition and subtraction
     index = 1
     while index < len(tokens):
-        type = getType(tokens, index)
+        type = getType(tokens[index])
         if (type == 'PLUS' || type == 'MINUS') && canCalculate(tokens, index):
-            ans += calculate(type, getNumber(tokens, index - 1), getNumber(tokens, index + 1))
+            ans += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
 
         index = lookNext(index)
 
