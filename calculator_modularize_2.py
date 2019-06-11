@@ -70,7 +70,7 @@ def tokenize(line):
             (token, index) = readDivide(line, index)
         
         tokens.append(token)
-    
+
     return tokens
 
 def getType(token):
@@ -90,8 +90,8 @@ def checkErrorInput(line):
     acceptedChars = ['+', '-', '*', '/']
     for c in line:
         # If c is not number and not correct operator
-        if !c.isdigit() && !(c in acceptedChars)
-            errorHandling('Invalid character found: ' + line[index])
+        if (not c.isdigit()) and (c not in acceptedChars):
+            print('Invalid character found: ' + c)
 
 
 # Check if the tokens are in correct order (number and operator take turns)
@@ -110,12 +110,15 @@ def checkTokenOrder(tokens):
     index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
-            errorHandling('Input Error: There are operators next to each other.')
+            print 'Input Error: There are operators next to each other.'
+            return True
+    
         index = lookNext(index)
 
     # If the last token is operator
     if isOperator(tokens[len(tokens) - 1]):
-        errorHandling('Input Error: This formula ends with operator.')
+        print 'Input Error: This formula ends with operator.'
+        return True
 
 def calculate(operator, num1, num2):
     result = 0
@@ -234,13 +237,13 @@ runTest()
 while True:
     print('> ', end="")
     line = input()
-    if !checkErrorInput(line):
+    if checkErrorInput(line):
         continue
     if len(line) == 0:
         print('Please input some value.')
         continue
     tokens = tokenize(line)
-    if !checkTokenOrder(tokens):
+    if checkTokenOrder(tokens):
         continue
     answer = evaluate(tokens)
     print("answer = %f\n" % answer)
