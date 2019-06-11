@@ -1,4 +1,4 @@
-#3
+# 3
 
 ### How to use
 
@@ -21,7 +21,7 @@
 - In calculation, I tried to dynamically change the tokens array.
 For example, 
 
-  **[1, +, 2, *, 3]** →
+  __[1, +, 2, *, 3]__ →
   
   **[1, +, 6]** →
   
