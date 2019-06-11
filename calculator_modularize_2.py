@@ -1,8 +1,4 @@
-def errorHandling(text):
-    print(text)
-    exit(1)
-
-#Move the focused character or token one step forward
+# Move the focused character or token one step forward
 def lookNext(index):
     return index + 1
 
@@ -72,8 +68,7 @@ def tokenize(line):
             (token, index) = readTimes(line, index)
         elif line[index] == '/':
             (token, index) = readDivide(line, index)
-        else:
-            errorHandling('Invalid character found: ' + line[index])
+        
         tokens.append(token)
     
     # Check the order error
@@ -92,6 +87,13 @@ def isOperator(token):
         return False
     else:
         return True
+
+def checkErrorInput(line):
+    acceptedChars = ['+', '-', '*', '/']
+    for c in line:
+        # If c is not number and not correct operator
+        if !c.isdigit() && !(c in acceptedChars)
+            errorHandling('Invalid character found: ' + line[index])
 
 
 # Check if the tokens are in correct order (number and operator take turns)
@@ -197,15 +199,15 @@ def runTest():
   test("2*2*2")     # *, *
   test("8/2/2")     # /, /
   
-  test("1+2*3")     # +, *
-  test("1-2*3")     # -, *
-  test("1+2*3-1")   # +, -, *
-  test("1+4/2")     # +, /
-  test("1-4/2")     # -, /
-  test("1+4/2-1")   # +, -, /
-  test("3*4/2")     # *, /
-  test("1+3*4/2")     # +, *, /
-  test("1-3*4/2")     # -, *, /
+  test("1+2*3")         # +, *
+  test("1-2*3")         # -, *
+  test("1+2*3-1")       # +, -, *
+  test("1+4/2")         # +, /
+  test("1-4/2")         # -, /
+  test("1+4/2-1")       # +, -, /
+  test("3*4/2")         # *, /
+  test("1+3*4/2")       # +, *, /
+  test("1-3*4/2")       # -, *, /
   test("1+3*4/2-1")     # +, -, *, /
   
   # with decimal
@@ -234,9 +236,13 @@ runTest()
 while True:
     print('> ', end="")
     line = input()
+    if !checkErrorInput(line):
+        continue
     if len(line) == 0:
         print('Please input some value.')
         continue
     tokens = tokenize(line)
+    if !checkTokenOrder(tokens):
+        continue
     answer = evaluate(tokens)
     print("answer = %f\n" % answer)
