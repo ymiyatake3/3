@@ -3,12 +3,12 @@ def lookNext(index):
     return index + 1
 
 # Make a number token
-def setNumToken(number):
+def makeNumToken(number):
     token = {'type': 'NUMBER', 'number': number}
     return token
 
 # Make an other token
-def setToken(type):
+def makeToken(type):
     token = {'type': type}
     return token
 
@@ -36,23 +36,23 @@ def readNumber(line, index):
             index = lookNext(index)
 
     # Set the token type
-    token = setNumToken(number)
+    token = makeNumToken(number)
     return token, index
 
 def readPlus(line, index):
-    token = setToken('PLUS')
+    token = makeToken('PLUS')
     return token, lookNext(index)
 
 def readMinus(line, index):
-    token = setToken('MINUS')
+    token = makeToken('MINUS')
     return token, lookNext(index)
 
 def readTimes(line, index):
-    token = setToken('TIMES')
+    token = makeToken('TIMES')
     return token, lookNext(index)
 
 def readDivide(line, index):
-    token = setToken('DIVIDE')
+    token = makeToken('DIVIDE')
     return token, lookNext(index)
 
 ##################
@@ -78,12 +78,12 @@ def checkTokenOrder(tokens):
     # If the first token is '-'
     if getType(tokens[0]) == 'MINUS':
         # Insert 0 befere the '-'
-        tokens.insert(0, setNumToken(0))
+        tokens.insert(0, makeNumToken(0))
     
     # If the input is number only
     if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
-        tokens.append(setToken('PLUS'))
-        tokens.append(setNumToken(0))
+        tokens.append(makeToken('PLUS'))
+        tokens.append(makeNumToken(0))
     
     index = 0
     while index < len(tokens) - 1:
@@ -97,26 +97,6 @@ def checkTokenOrder(tokens):
     if isOperator(tokens[len(tokens) - 1]):
         print('Input Error: This formula ends with operator.')
         return True
-
-# Look each character and separate to tokens
-def tokenize(line):
-    tokens = []
-    index = 0
-    while index < len(line):
-        if line[index].isdigit():
-            (token, index) = readNumber(line, index)
-        elif line[index] == '+':
-            (token, index) = readPlus(line, index)
-        elif line[index] == '-':
-            (token, index) = readMinus(line, index)
-        elif line[index] == '*':
-            (token, index) = readTimes(line, index)
-        elif line[index] == '/':
-            (token, index) = readDivide(line, index)
-        
-        tokens.append(token)
-
-    return tokens
 
 def getType(token):
     return token['type']
@@ -140,6 +120,28 @@ def calculate(operator, num1, num2):
     return result
 
 
+
+# Look each character and separate to tokens
+def tokenize(line):
+    tokens = []
+    index = 0
+    while index < len(line):
+        if line[index].isdigit():
+            (token, index) = readNumber(line, index)
+        elif line[index] == '+':
+            (token, index) = readPlus(line, index)
+        elif line[index] == '-':
+            (token, index) = readMinus(line, index)
+        elif line[index] == '*':
+            (token, index) = readTimes(line, index)
+        elif line[index] == '/':
+            (token, index) = readDivide(line, index)
+        
+        tokens.append(token)
+    
+    return tokens
+
+
 # Get the answer from the list of tokens
 def evaluate(tokens):
     answer = 0
@@ -156,7 +158,7 @@ def evaluate(tokens):
             del tokens[index - 1 : index + 2]
                 
             # Insert the result instead (ex: 6)
-            tokens.insert(index - 1, setNumToken(result))
+            tokens.insert(index - 1, makeNumToken(result))
         else:
             index = lookNext(index)
 
@@ -167,7 +169,7 @@ def evaluate(tokens):
         if type == 'PLUS' or type == 'MINUS':
             result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
             del tokens[index - 1 : index + 2]
-            tokens.insert(index - 1, setNumToken(result))
+            tokens.insert(index - 1, makeNumToken(result))
         else:
             index = lookNext(index)
 
