@@ -2,16 +2,20 @@
 def lookNext(index):
     return index + 1
 
+# Make a number token
 def setNumToken(number):
     token = {'type': 'NUMBER', 'number': number}
     return token
 
+# Make an other token
 def setToken(type):
     token = {'type': type}
     return token
 
 
 # Define the token of each input characters
+##################
+
 def readNumber(line, index):
     number = 0
     
@@ -51,33 +55,7 @@ def readDivide(line, index):
     token = setToken('DIVIDE')
     return token, lookNext(index)
 
-
-
-# Look each character and separate to tokens
-def tokenize(line):
-    tokens = []
-    index = 0
-    while index < len(line):
-        if line[index].isdigit():
-            (token, index) = readNumber(line, index)
-        elif line[index] == '+':
-            (token, index) = readPlus(line, index)
-        elif line[index] == '-':
-            (token, index) = readMinus(line, index)
-        elif line[index] == '*':
-            (token, index) = readTimes(line, index)
-        elif line[index] == '/':
-            (token, index) = readDivide(line, index)
-        
-        tokens.append(token)
-
-    return tokens
-
-def getType(token):
-    return token['type']
-
-def getNumber(token):
-    return token['number']
+##################
 
 def isOperator(token):
     if token['type'] == 'NUMBER':
@@ -106,19 +84,46 @@ def checkTokenOrder(tokens):
     if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
         tokens.append(setToken('PLUS'))
         tokens.append(setNumToken(0))
-
+    
     index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
             print('Input Error: There are operators next to each other.')
             return True
-    
+        
         index = lookNext(index)
-
+    
     # If the last token is operator
     if isOperator(tokens[len(tokens) - 1]):
         print('Input Error: This formula ends with operator.')
         return True
+
+# Look each character and separate to tokens
+def tokenize(line):
+    tokens = []
+    index = 0
+    while index < len(line):
+        if line[index].isdigit():
+            (token, index) = readNumber(line, index)
+        elif line[index] == '+':
+            (token, index) = readPlus(line, index)
+        elif line[index] == '-':
+            (token, index) = readMinus(line, index)
+        elif line[index] == '*':
+            (token, index) = readTimes(line, index)
+        elif line[index] == '/':
+            (token, index) = readDivide(line, index)
+        
+        tokens.append(token)
+
+    return tokens
+
+def getType(token):
+    return token['type']
+
+def getNumber(token):
+    return token['number']
+
 
 def calculate(operator, num1, num2):
     result = 0
