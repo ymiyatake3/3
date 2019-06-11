@@ -124,7 +124,7 @@ def calculate(operator, num1, num2):
         result = num1 - num2
     elif operator == 'TIMES':
         result = num1 * num2
-    elif operator == 'DIVID':
+    elif operator == 'DIVIDE':
         result = num1 / num2
 
     return result
@@ -161,6 +161,7 @@ def evaluate(tokens):
         else:
             index = lookNext(index)
 
+    # Finally remained value is the answer
     answer = getNumber(tokens[0])
     return answer
 
@@ -179,8 +180,42 @@ def test(line):
 # Add more tests to this function :)
 def runTest():
   print("==== Test started! ====")
-  test("1+2")
-  test("1.0+2.1-3")
+  
+  test("1")         # only number
+  test("12345678")  # number with more than 2 character
+  
+  test("1+2")   # +
+  test("3-1")   # -
+  test("1-3")   # answer is negative number
+  test("2*2")   # *
+  test("4/2")   # /
+  
+  test("1+2+3")     # +, +
+  test("10-2-1")    # -, -
+  test("2*2*2")     # *, *
+  test("8/2/2")     # /, /
+  
+  test("1+2*3")     # +, *
+  test("1-2*3")     # -, *
+  test("1+2*3-1")   # +, -, *
+  test("1+4/2")     # +, /
+  test("1-4/2")     # -, /
+  test("1+4/2-1")   # +, -, /
+  test("3*4/2")     # *, /
+  test("1+3*4/2")     # +, *, /
+  test("1-3*4/2")     # -, *, /
+  test("1+3*4/2-1")     # +, -, *, /
+  
+  # with decimal
+  test("1.234")       # only number
+  test("123.456")     # integer part has more than 2 characters
+  test("1.2+1.1")     # more than 2 decimal numbers
+  test("1.5+1")       # decimal number & integer
+  
+  # error inputs
+  test("")  # blank
+  test("")
+  
   print("==== Test finished! ====\n")
 
 runTest()
@@ -188,6 +223,9 @@ runTest()
 while True:
   print('> ', end="")
   line = input()
+  if len(line) == 0:
+    print('Please input any value.')
+    continue
   tokens = tokenize(line)
   answer = evaluate(tokens)
   print("answer = %f\n" % answer)
