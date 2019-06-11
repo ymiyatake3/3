@@ -71,9 +71,6 @@ def tokenize(line):
         
         tokens.append(token)
     
-    # Check the order error
-    checkTokenOrder(tokens)
-
     return tokens
 
 def getType(token):
@@ -88,6 +85,7 @@ def isOperator(token):
     else:
         return True
 
+# Check if there is not accepted character
 def checkErrorInput(line):
     acceptedChars = ['+', '-', '*', '/']
     for c in line:
