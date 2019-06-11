@@ -143,7 +143,7 @@ def evaluate(tokens):
             result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
                                
             # Delete the calculated part (ex: 2, *, 3)
-            del tokens[index - 1 : index + 1]
+            del tokens[index - 1 : index + 2]
                 
             # Insert the result instead (ex: 6)
             tokens.insert(index - 1, setNumToken(result))
@@ -155,11 +155,13 @@ def evaluate(tokens):
     while index < len(tokens):
         type = getType(tokens[index])
         if type == 'PLUS' or type == 'MINUS':
-            answer += calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
+            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
+            del tokens[index - 1 : index + 2]
+            tokens.insert(index - 1, setNumToken(result))
+        else:
+            index = lookNext(index)
 
-
-        index = lookNext(index)
-
+    answer = getNumber(tokens[0])
     return answer
 
 
