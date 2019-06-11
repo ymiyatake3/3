@@ -1,4 +1,8 @@
-# Move the focused character or token one step forward
+def errorHandling(text):
+    print(text)
+    exit(1)
+
+#Move the focused character or token one step forward
 def lookNext(index):
     return index + 1
 
@@ -52,6 +56,7 @@ def readDivide(line, index):
     return token, lookNext(index)
 
 
+
 # Look each character and separate to tokens
 def tokenize(line):
     tokens = []
@@ -68,8 +73,7 @@ def tokenize(line):
         elif line[index] == '/':
             (token, index) = readDivide(line, index)
         else:
-            print('Invalid character found: ' + line[index])
-            exit(1)
+            errorHandling('Invalid character found: ' + line[index])
         tokens.append(token)
     
     # Check the order error
@@ -106,14 +110,12 @@ def checkTokenOrder(tokens):
     index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
-            print('Input Error: There are operators next to each other.')
-            exit(1)
+            errorHandling('Input Error: There are operators next to each other.')
         index = lookNext(index)
 
     # If the last token is operator
     if isOperator(tokens[len(tokens) - 1]):
-        print('Input Error: This formula ends with operator.')
-        exit(1)
+        errorHandling('Input Error: This formula ends with operator.')
 
 def calculate(operator, num1, num2):
     result = 0
