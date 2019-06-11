@@ -87,7 +87,7 @@ def isOperator(token):
 
 # Check if there is not accepted character
 def checkErrorInput(line):
-    acceptedChars = ['+', '-', '*', '/']
+    acceptedChars = ['+', '-', '*', '/', '.']
     for c in line:
         # If c is not number and not correct operator
         if (not c.isdigit()) and (c not in acceptedChars):
@@ -110,14 +110,14 @@ def checkTokenOrder(tokens):
     index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
-            print 'Input Error: There are operators next to each other.'
+            print('Input Error: There are operators next to each other.')
             return True
     
         index = lookNext(index)
 
     # If the last token is operator
     if isOperator(tokens[len(tokens) - 1]):
-        print 'Input Error: This formula ends with operator.'
+        print('Input Error: This formula ends with operator.')
         return True
 
 def calculate(operator, num1, num2):
@@ -173,7 +173,14 @@ def evaluate(tokens):
 
 # Return if the calculated answer is true or false
 def test(line):
+    if len(line) == 0:
+        print('Please input some value.')
+        return
+    if checkErrorInput(line):
+        return
     tokens = tokenize(line)
+    if checkTokenOrder(tokens):
+        return
     actualAnswer = evaluate(tokens)
     expectedAnswer = eval(line)
     if abs(actualAnswer - expectedAnswer) < 1e-8:
@@ -237,10 +244,10 @@ runTest()
 while True:
     print('> ', end="")
     line = input()
-    if checkErrorInput(line):
-        continue
     if len(line) == 0:
         print('Please input some value.')
+        continue
+    if checkErrorInput(line):
         continue
     tokens = tokenize(line)
     if checkTokenOrder(tokens):
