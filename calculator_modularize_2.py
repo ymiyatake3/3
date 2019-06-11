@@ -209,25 +209,34 @@ def runTest():
   test("1+3*4/2-1")     # +, -, *, /
   
   # with decimal
-  test("1.234")       # only number
+  test("1.2")         # only number
+  test("1.234")       # decimal part has more than 2 characters
   test("123.456")     # integer part has more than 2 characters
   test("1.2+1.1")     # more than 2 decimal numbers
   test("1.5+1")       # decimal number & integer
   
   # error inputs
-  test("")  # blank
-  test("")
+  test("")              # blank
+  test("10000000000")   # too big
+  test("+")             # only operator
+  test("*")
+  test("1++1")
+  test("1*+1")
+  test("1*/1")
+  test("1..1")
+  test(".1")
+  test("a")
   
   print("==== Test finished! ====\n")
 
 runTest()
 
 while True:
-  print('> ', end="")
-  line = input()
-  if len(line) == 0:
-    print('Please input any value.')
-    continue
-  tokens = tokenize(line)
-  answer = evaluate(tokens)
-  print("answer = %f\n" % answer)
+    print('> ', end="")
+    line = input()
+    if len(line) == 0:
+        print('Please input some value.')
+        continue
+    tokens = tokenize(line)
+    answer = evaluate(tokens)
+    print("answer = %f\n" % answer)
