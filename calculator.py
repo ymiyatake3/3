@@ -74,7 +74,7 @@ def isOperator(token):
         return True
 
 # Check if there is a strange character
-def checkErrorInput(line):
+def checkCharacterError(line):
     
     # If there is character that is not a number and not a correct operator
     acceptedChars = ['+', '-', '*', '/', '.', '(', ')']
@@ -106,7 +106,7 @@ def lastIndex(l, element):
 
 
 # Check if the tokens are in correct order (number and operator take turns)
-def checkTokenOrder(tokens):
+def checkTokenError(tokens):
     
     leftBracket = typeToToken('LEFT')
     rightBracket = typeToToken('RIGHT')
@@ -280,10 +280,10 @@ def test(line):
     if len(line) == 0:
         print('Please input some value.')
         return
-    if checkErrorInput(line):
+    if checkCharacterError(line):
         return
     tokens = tokenize(line)
-    if checkTokenOrder(tokens):
+    if checkTokenError(tokens):
         return
     actualAnswer = evaluate(tokens)
     expectedAnswer = eval(line)
@@ -339,7 +339,7 @@ def runTest():
     
   
     # error inputs
-    test("")              # blank
+    test("")               # blank
     #test("10000000000")   # too big
     test("+")             # only operator
     test("*")
@@ -350,6 +350,9 @@ def runTest():
     test(".1")
     test("a")
     test("32+a+b+c")
+    test("()")              # Only bracket
+    test("(1+1))")          # The numbers of left and right are different
+    test(")1+1(")           # Numbers are same but not starts with (
   
     print("==== Test finished! ====\n")
 
@@ -364,10 +367,10 @@ while True:
     if len(line) == 0:
         print('Please input some value.')
         continue
-    if checkErrorInput(line):
+    if checkCharacterError(line):
         continue
     tokens = tokenize(line)
-    if checkTokenOrder(tokens):
+    if checkTokenError(tokens):
         continue
     answer = evaluate(tokens)
     print("answer = %f\n" % answer)
