@@ -99,6 +99,9 @@ def checkErrorInput(line):
     
     return False
 
+def lastIndex(list, element):
+    len(list) - 1 - tokens[::1].index(element)
+
 
 # Check if the tokens are in correct order (number and operator take turns)
 def checkTokenOrder(tokens):
@@ -136,16 +139,16 @@ def checkTokenOrder(tokens):
         print('Input Error: There is a missing curly bracket')
         return True
 
+    # If there is ')' before '('
     if leftBracket in tokens and rightBracket in tokens:
         firstLeftIndex = tokens.index(leftBracket)
         firstRightIndex = tokens.index(rightBracket)
-        lastLeftIndex = len(tokens) - 1 - tokens[::-1].index(leftBracket)
-        lastRightIndex = len(tokens) - 1 - tokens[::-1].index(rightBracket)
+        lastLeftIndex = lastIndex(tokens, leftBracket)
+        lastRightIndex = lastIndex(tokens, rightBracket)
 
         if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
             print('Input Error: Strange order of curly brackets.')
             return True
-
 
     return False
 
@@ -197,12 +200,12 @@ def binaryOperation(operator, num1, num2):
     
     return result
 
-
-def calculate(formula, types):
+# Do calculation of the operations in argument 'operations'
+def calculate(formula, operations):
     index = 0
     while index < len(formula):
         type = getType(formula[index])
-        if type in types:
+        if type in operations:
             # Calculate
             result = binaryOperation(type, getNumber(formula[index - 1]), getNumber(formula[index + 1]))
             
@@ -217,18 +220,39 @@ def calculate(formula, types):
     return formula
 
 
+def calculate1(formula):
+    # Multiplication and division
+    formula = calculate(formula, ['TIMES', 'DIVIDE'])
+    
+    # Addition and subtraction
+    formula = calculate(formula, ['PLUS', 'MINUS'])
+
+    # Finally remained value is the answer
+    answer = getNumber(formula[0])
+
+    return answer
+
+
 # Get an answer from the list of tokens
 def evaluate(tokens):
     answer = 0
     
-    # Multiplication and division
-    tokens = calculate(tokens, ['TIMES', 'DIVIDE'])
+    while typeToToken('LEFT') in tokens:
+        lastLeftIndex = lastIndex(tokens, typeToToken('LEFT'))
+        index = lastLeftIndex + 1
+        while not getType(tokens(index)) == 'RIGHT':
+            index = lookNext(index)
+            
+            # Calculate inside of the brackets
+            result = calculate1(tokens[lastLeftIndex + 1 : index])
+            
+            # Delete from ( to )
+            del tokens[lastLeftIndex : index + 1]
+            
+            tokens.insert(lastLeftIndex, result)
+    
+    calculate1(tokens)
 
-    # Addition and subtraction
-    tokens = calculate(tokens, ['PLUS', 'MINUS'])
-
-    # Finally remained value is the answer
-    answer = getNumber(tokens[0])
     return answer
 
 
