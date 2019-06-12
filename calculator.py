@@ -12,9 +12,12 @@ def makeToken(type):
     token = {'type': type}
     return token
 
+def makeBracketToken(LR):
+    token = {'type': 'BRACKET', 'LR': LR}
+
 
 # Define the token of each input characters
-##################
+#-----------------------------
 
 def readNumber(line, index):
     number = 0
@@ -55,7 +58,15 @@ def readDivide(line, index):
     token = makeToken('DIVIDE')
     return token, lookNext(index)
 
-##################
+def readLeftBracket(line, index):
+    token = makeBracketToken('Left')
+    return token, lookNext(index)
+
+def readRightBracket(line, index):
+    token = makeBracketToken('Right')
+    return token, lookNext(index)
+
+#-----------------------------
 
 def isOperator(token):
     if token['type'] == 'NUMBER':
@@ -155,6 +166,10 @@ def tokenize(line):
             (token, index) = readTimes(line, index)
         elif line[index] == '/':
             (token, index) = readDivide(line, index)
+        elif line[index] == '('
+            (token, index) = readLeftBracket(line, index)
+        elif line[index] == ')'
+            (token, index) = readRightBracket(line, index)
         
         tokens.append(token)
     
@@ -217,54 +232,57 @@ def test(line):
 
 # Add more tests to this function :)
 def runTest():
-  print("==== Test started! ====")
+    print("==== Test started! ====")
   
-  test("1")         # only number
-  test("12345678")  # number with more than 2 character
+    test("1")         # only number
+    test("12345678")  # number with more than 2 character
   
-  test("1+2")   # +
-  test("3-1")   # -
-  test("1-3")   # answer is negative number
-  test("2*2")   # *
-  test("4/2")   # /
+    test("1+2")   # +
+    test("3-1")   # -
+    test("1-3")   # answer is negative number
+    test("2*2")   # *
+    test("4/2")   # /
+      
+    test("1+2+3")     # +, +
+    test("10-2-1")    # -, -
+    test("2*2*2")     # *, *
+    test("8/2/2")     # /, /
+    
+    test("1+2*3")         # +, *
+    test("1-2*3")         # -, *
+    test("1+2*3-1")       # +, -, *
+    test("1+4/2")         # +, /
+    test("1-4/2")         # -, /
+    test("1+4/2-1")       # +, -, /
+    test("3*4/2")         # *, /
+    test("1+3*4/2")       # +, *, /
+    test("1-3*4/2")       # -, *, /
+    test("1+3*4/2-1")     # +, -, *, /
   
-  test("1+2+3")     # +, +
-  test("10-2-1")    # -, -
-  test("2*2*2")     # *, *
-  test("8/2/2")     # /, /
+    # with decimal
+    test("1.2")         # only number
+    test("1.234")       # decimal part has more than 2 characters
+    test("123.456")     # integer part has more than 2 characters
+    test("1.2+1.1")     # more than 2 decimal numbers
+    test("1.5+1")       # decimal number & integer
   
-  test("1+2*3")         # +, *
-  test("1-2*3")         # -, *
-  test("1+2*3-1")       # +, -, *
-  test("1+4/2")         # +, /
-  test("1-4/2")         # -, /
-  test("1+4/2-1")       # +, -, /
-  test("3*4/2")         # *, /
-  test("1+3*4/2")       # +, *, /
-  test("1-3*4/2")       # -, *, /
-  test("1+3*4/2-1")     # +, -, *, /
+    # error inputs
+    test("")              # blank
+    #test("10000000000")   # too big
+    test("+")             # only operator
+    test("*")
+    test("1++1")
+    test("1*+1")
+    test("1*/1")
+    test("1..1")
+    test(".1")
+    test("a")
+    test("32+a+b+c")
   
-  # with decimal
-  test("1.2")         # only number
-  test("1.234")       # decimal part has more than 2 characters
-  test("123.456")     # integer part has more than 2 characters
-  test("1.2+1.1")     # more than 2 decimal numbers
-  test("1.5+1")       # decimal number & integer
-  
-  # error inputs
-  test("")              # blank
-  #test("10000000000")   # too big
-  test("+")             # only operator
-  test("*")
-  test("1++1")
-  test("1*+1")
-  test("1*/1")
-  test("1..1")
-  test(".1")
-  test("a")
-  test("32+a+b+c")
-  
-  print("==== Test finished! ====\n")
+    print("==== Test finished! ====\n")
+
+
+
 
 runTest()
 
