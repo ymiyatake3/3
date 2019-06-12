@@ -1,23 +1,55 @@
-# Move the focused character or token one step forward
+# Original code:
+# https://github.com/xharaken/step2015/blob/master/calculator_modularize_2.py
+
+
 def lookNext(index):
+    """Move the focused character or token one step forward.
+    
+    Args:
+        index: Current index
+    Returns:
+        Next index
+    """
     return index + 1
 
-# Make a number token
 def numToToken(number):
+    """Make a number token
+
+    Args:
+        number: A number put into 'number'
+    Returns:
+        Token of number
+    """
     token = {'type': 'NUMBER', 'number': number}
     return token
 
-# Make an other token
+
 def typeToToken(type):
+    """Make a token with a specified type
+        
+    Args:
+        type: Type of the token
+    Returns:
+        Token of a operator or a bracket
+    """
     token = {'type': type}
     return token
 
 
 
-# Define the token of each input characters
-#-----------------------------
+
 
 def readNumber(line, index):
+    """Make successive numbers (include decimal point) a token
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
+    
     number = 0
     
     # While the focused character is a number
@@ -41,46 +73,124 @@ def readNumber(line, index):
     return token, index
 
 def readPlus(line, index):
+    """Make '+' a token with type 'PLUS'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('PLUS')
     return token, lookNext(index)
 
 def readMinus(line, index):
+    """Make '-' a token with type 'MINUS'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('MINUS')
     return token, lookNext(index)
 
 def readTimes(line, index):
+    """Make '*' a token with type 'TIMES'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('TIMES')
     return token, lookNext(index)
 
 def readDivide(line, index):
+    """Make '/' a token with type 'DIVIDE'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('DIVIDE')
     return token, lookNext(index)
 
 def readLeftBracket(line, index):
+    """Make '(' a token with type 'LEFT'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('LEFT')
     return token, lookNext(index)
 
 def readRightBracket(line, index):
+    """Make ')' a token with type 'RIGHT'
+        
+    Args:
+        line: Char array of user's input
+        index: Index of the first number
+    Returns:
+        token: Created token
+        index: Index of the line to see next
+    """
     token = typeToToken('RIGHT')
     return token, lookNext(index)
 
-#-----------------------------
+
+
+
+
 
 def isOperator(token):
+    """Detect if a token is a operator or not
+        
+    Args:
+        token: Token to detect
+    Returns:
+        True or False
+    """
     type = getType(token)
     if type == 'NUMBER' or type == 'LEFT' or type == 'RIGHT':
         return False
     else:
         return True
 
-# Return the index that element appears at last
+
 def lastIndex(l, element):
+    """Return the last index that the element appear
+        
+    Args:
+        l: List to seek in
+        element: Element to seek
+    Returns:
+        Last index
+    """
     return len(l) - 1 - l[::-1].index(element)
 
 
-# ---------- Error handling start ---------------
-# Detect errors before tokenize
 def checkCharacterError(line):
+    """Detect errors before tokenize
+        
+    Args:
+        line: Char array of user's input
+    Returns:
+        If any error was detected, True
+        If there is no error, False
+    """
     
     # If there is character that is not a number and not a correct operator
     acceptedChars = ['+', '-', '*', '/', '.', '(', ')']
@@ -111,8 +221,15 @@ def checkCharacterError(line):
     return False
 
 
-# Detect errors after tokenize
 def checkTokenError(tokens):
+    """Detect errors after tokenize
+        
+    Args:
+        tokens: Array of token objects
+    Returns:
+        If any error was detected, True
+        If there is no error, False
+    """
     
     leftBracket = typeToToken('LEFT')
     rightBracket = typeToToken('RIGHT')
@@ -177,19 +294,43 @@ def checkTokenError(tokens):
 
     return False
 
-# ---------- Error handling end ---------------
+
+
 
 
 def getType(token):
+    """Return type of the token
+        
+    Args:
+        token: A token of any type
+    Returns:
+        Token's type
+    """
     return token['type']
 
+
 def getNumber(token):
+    """Return number of the NUMBER token
+        
+    Args:
+        token: A token of number
+    Returns:
+        Token's number
+    """
+    
     return token['number']
 
 
 
-# Look each character and separate to tokens
+
 def tokenize(line):
+    """Separate the input array into tokens
+        
+    Args:
+        line: Char array of user's input
+    Returns:
+        Array of token objects
+    """
     tokens = []
     index = 0
     while index < len(line):
@@ -214,6 +355,15 @@ def tokenize(line):
 
 
 def binaryOperation(operator, num1, num2):
+    """Do binary operation and returns the result
+        
+    Args:
+        operator: Operator token
+        num1: 1st operand
+        num2: 2nd operand
+    Returns:
+        The result of calculation (as a number)
+    """
     result = 0
     
     if operator == 'PLUS':
@@ -227,8 +377,16 @@ def binaryOperation(operator, num1, num2):
     
     return result
 
-# Do calculation of the specified operations
-def calculate(formula, operations):
+
+def evaluateSpecifiedOperation(formula, operations):
+    """Do calculation of the specified operations
+        
+    Args:
+        formula: Array of token objects
+        operations: Array of operators to calculate
+    Returns:
+        The result of calculation (as a token array)
+    """
     index = 0
     while index < len(formula):
         type = getType(formula[index])
@@ -247,19 +405,34 @@ def calculate(formula, operations):
     return formula
 
 
-def twoStageCalculation(formula):
+def evaluateInTwoStage(formula):
+    """Do multiplication and division first, addition and subtraction second
+        
+    Args:
+        formula: Array of token objects
+    Returns:
+        The result of calculation (as a token array)
+    """
     
     # * and /
-    formula = calculate(formula, ['TIMES', 'DIVIDE'])
+    formula = evaluateSpecifiedOperation(formula, ['TIMES', 'DIVIDE'])
     
     # + and -
-    formula = calculate(formula, ['PLUS', 'MINUS'])
+    formula = evaluateSpecifiedOperation(formula, ['PLUS', 'MINUS'])
 
     return formula
 
 
 # Get an answer from the list of tokens
 def evaluate(tokens):
+    """Evaluates the expression represented by tokens and returns a final number
+        
+    Args:
+        token: Array of token objects
+    Returns:
+        A single number after processing all tokens
+    """
+
     answer = 0
 
     # Inside of the brackets
@@ -270,7 +443,7 @@ def evaluate(tokens):
             index = lookNext(index)
             
         # Calculate inside of the brackets
-        result = twoStageCalculation(tokens[lastLeftIndex + 1 : index])
+        result = evaluateInTwoStage(tokens[lastLeftIndex + 1 : index])
 
         # Delete from '(' to ')'
         del tokens[lastLeftIndex : index + 1]
@@ -279,14 +452,20 @@ def evaluate(tokens):
         tokens[lastLeftIndex:lastLeftIndex] = result
     
     # Calculate with no brackets
-    tokens = twoStageCalculation(tokens)
+    tokens = evaluateInTwoStage(tokens)
     
     # Finally remained is answer
     return getNumber(tokens[0])
 
 
-# Return if the calculated answer is true or false
 def test(line):
+    """Evaluate the input expression and check if the answer is right
+        
+    Args:
+        line: Char array of user's input
+    Returns:
+        None (Print the result)
+    """
     if len(line) == 0:
         print('Please input some value.')
         return
@@ -305,6 +484,14 @@ def test(line):
 
 # Add more tests to this function :)
 def runTest():
+    """Execute tests
+        
+    Args:
+        None
+    Returns:
+        None
+    """
+    
     print("==== Test started! ====")
   
     test("1")         # only number
