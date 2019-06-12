@@ -97,8 +97,6 @@ def checkErrorInput(line):
         print('Input Error: Invalid number.')
         return True
     
-    if
-    
     return False
 
 
@@ -110,11 +108,13 @@ def checkTokenOrder(tokens):
         # Insert 0 befere the '-'
         tokens.insert(0, makeNumToken(0))
     
-    # If the input is number only
+    # If the input is only a number
     if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
+        # Insert +0 after the number
         tokens.append(makeToken('PLUS'))
         tokens.append(makeNumToken(0))
     
+    # Check the order
     index = 0
     while index < len(tokens) - 1:
         if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
@@ -133,21 +133,6 @@ def getType(token):
 
 def getNumber(token):
     return token['number']
-
-
-def calculate(operator, num1, num2):
-    result = 0
-    
-    if operator == 'PLUS':
-        result = num1 + num2
-    elif operator == 'MINUS':
-        result = num1 - num2
-    elif operator == 'TIMES':
-        result = num1 * num2
-    elif operator == 'DIVIDE':
-        result = num1 / num2
-
-    return result
 
 
 
@@ -176,36 +161,49 @@ def tokenize(line):
     return tokens
 
 
+def binaryOperation(operator, num1, num2):
+    result = 0
+    
+    if operator == 'PLUS':
+        result = num1 + num2
+    elif operator == 'MINUS':
+        result = num1 - num2
+    elif operator == 'TIMES':
+        result = num1 * num2
+    elif operator == 'DIVIDE':
+        result = num1 / num2
+    
+    return result
+
+
+def calculate(formula, types)
+    index = 0
+    while index < len(formula):
+        type = getType(formula[index])
+        if type in types:
+            # Calculate
+            result = binaryOperation(type, getNumber(formula[index - 1]), getNumber(formula[index + 1]))
+            
+            # Delete the calculated part (ex: 2, *, 3)
+            del formula[index - 1 : index + 2]
+                
+                # Insert the result instead (ex: 6)
+                tokens.insert(index - 1, makeNumToken(result))
+            else:
+                index = lookNext(index)
+
+    return formula
+
+
 # Get an answer from the list of tokens
 def evaluate(tokens):
     answer = 0
     
     # Multiplication and division
-    index = 0
-    while index < len(tokens):
-        type = getType(tokens[index])
-        if type == 'TIMES' or type == 'DIVIDE':
-            # Calculate
-            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
-                               
-            # Delete the calculated part (ex: 2, *, 3)
-            del tokens[index - 1 : index + 2]
-                
-            # Insert the result instead (ex: 6)
-            tokens.insert(index - 1, makeNumToken(result))
-        else:
-            index = lookNext(index)
+    tokens = calculate(tokens, ['TIMES', 'DIVIDE'])
 
     # Addition and subtraction
-    index = 0
-    while index < len(tokens):
-        type = getType(tokens[index])
-        if type == 'PLUS' or type == 'MINUS':
-            result = calculate(type, getNumber(tokens[index - 1]), getNumber(tokens[index + 1]))
-            del tokens[index - 1 : index + 2]
-            tokens.insert(index - 1, makeNumToken(result))
-        else:
-            index = lookNext(index)
+    tokens = calculate(tokens, ['PLUS', 'MINUS'])
 
     # Finally remained value is the answer
     answer = getNumber(tokens[0])
