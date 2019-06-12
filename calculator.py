@@ -133,6 +133,19 @@ def checkTokenOrder(tokens):
         print('Input Error: There is a missing curly bracket')
         return True
 
+    firstLeftIndex = tokens.index(typeToToken('LEFT'))
+    firstRightIndex = tokens.index(typeToToken('RIGHT'))
+    lastLeftIndex = len(tokens) - 1 - tokens[::-1].index(typeToToken('LEFT'))
+    lastRightIndex = len(tokens) - 1 - tokens[::-1].index(typeToToken('RIGHT'))
+
+    if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
+        print('Input Error: Strange order of curly brackets.')
+        return True
+
+
+    return False
+
+
 def getType(token):
     return token['type']
 
