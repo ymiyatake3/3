@@ -66,15 +66,25 @@ def isOperator(token):
 # Check if there is not accepted character
 def checkErrorInput(line):
     acceptedChars = ['+', '-', '*', '/', '.']
+    errors = []
     for c in line:
         # If c is not number and not correct operator
         if (not c.isdigit()) and (c not in acceptedChars):
-            print('Input Error: Invalid character found -> ' + c)
-            return True
+            errors.append(c)
+
+    if errors:
+        print('Input Error: Invalid character found -> ' + ''.join(errors))
+        return True
 
     if '..' in line:
         print('Input Error: Invalid number.')
         return True
+
+    # line starts with . or character before . is not a number (ex: .123, 1+.1)
+    if line[0] == '.' or ('.' in line and not line[line.index('.') - 1].isdigit()):
+        print('Input Error: Invalid number.')
+        return True
+    
     
     return False
 
@@ -241,7 +251,7 @@ def runTest():
   
   # error inputs
   test("")              # blank
-  test("10000000000")   # too big
+  #test("10000000000")   # too big
   test("+")             # only operator
   test("*")
   test("1++1")
@@ -250,6 +260,7 @@ def runTest():
   test("1..1")
   test(".1")
   test("a")
+  test("32+a+b+c")
   
   print("==== Test finished! ====\n")
 
