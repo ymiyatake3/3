@@ -63,24 +63,26 @@ def isOperator(token):
     else:
         return True
 
-# Check if there is not accepted character
+# Check if there is strange character
 def checkErrorInput(line):
+    
+    # If there is character that is not a number and not a correct operator
     acceptedChars = ['+', '-', '*', '/', '.']
     errors = []
     for c in line:
-        # If c is not number and not correct operator
         if (not c.isdigit()) and (c not in acceptedChars):
             errors.append(c)
-
     if errors:
         print('Input Error: Invalid character found -> ' + ''.join(errors))
         return True
 
+
+    # If there are successive dots
     if '..' in line:
         print('Input Error: Invalid number.')
         return True
 
-    # line starts with . or character before . is not a number (ex: .123, 1+.1)
+    # line starts with . or the character before . is not a number (ex: .123, 1+.1)
     if line[0] == '.' or ('.' in line and not line[line.index('.') - 1].isdigit()):
         print('Input Error: Invalid number.')
         return True
