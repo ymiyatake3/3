@@ -100,39 +100,16 @@ def checkErrorInput(line):
     return False
 
 def lastIndex(list, element):
-    len(list) - 1 - tokens[::1].index(element)
+    len(list) - 1 - list[::1].index(element)
 
 
 # Check if the tokens are in correct order (number and operator take turns)
 def checkTokenOrder(tokens):
     
-    # If the first token is '-'
-    if getType(tokens[0]) == 'MINUS':
-        # Insert 0 befere the '-'
-        tokens.insert(0, numToToken(0))
-    
-    # If the input is only a number
-    if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
-        # Insert +0 after the number
-        tokens.append(typeToToken('PLUS'))
-        tokens.append(numToToken(0))
-    
-    # Check the order
-    index = 0
-    while index < len(tokens) - 1:
-        if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
-            print('Input Error: There are operators next to each other.')
-            return True
-        
-        index = lookNext(index)
-    
-    # If the last token is operator
-    if isOperator(tokens[len(tokens) - 1]):
-        print('Input Error: This formula ends with operator.')
-        return True
-
     leftBracket = typeToToken('LEFT')
     rightBracket = typeToToken('RIGHT')
+    
+    #---Errors of bracket places---
 
     # If the number of '(' and ')' are not same
     if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT')):
@@ -149,6 +126,38 @@ def checkTokenOrder(tokens):
         if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
             print('Input Error: Strange order of curly brackets.')
             return True
+
+
+    #---Errors of operators---
+
+    # If the first token is '-', insert 0 on the top.
+    if getType(tokens[0]) == 'MINUS':
+        tokens.insert(0, numToToken(0))
+        
+    # If the input is only a number, insert +0 at last.
+    if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
+        tokens.append(typeToToken('PLUS'))
+        tokens.append(numToToken(0))
+    
+    # Delete ()
+    for token in tokens:
+        if token == leftBracket or token == rightBracket:
+            tokens.remove(token)
+
+    # Check the order
+    index = 0
+    while index < len(tokens) - 1:
+        if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
+            print('Input Error: There are operators next to each other.')
+            return True
+            
+        index = lookNext(index)
+
+    # If the last token is operator
+    if isOperator(tokens[len(tokens) - 1]):
+        print('Input Error: This formula ends with operator.')
+        return True
+
 
     return False
 
