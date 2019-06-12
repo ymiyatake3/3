@@ -77,7 +77,7 @@ def isOperator(token):
 def checkErrorInput(line):
     
     # If there is character that is not a number and not a correct operator
-    acceptedChars = ['+', '-', '*', '/', '.']
+    acceptedChars = ['+', '-', '*', '/', '.', '(', ')']
     errors = []
     for c in line:
         if (not c.isdigit()) and (c not in acceptedChars):
@@ -309,6 +309,14 @@ def runTest():
     test("123.456")     # integer part has more than 2 characters
     test("1.2+1.1")     # more than 2 decimal numbers
     test("1.5+1")       # decimal number & integer
+    
+    # with brackets
+    test("(1+1)")           # simple ()
+    test("2*(1+1)")         # calculation order change
+    test("2*(1+1)/2")       # calculation after ()
+    test("1+(1+(1+1))")     # () in ()
+    test("2*(1+1)*(1+1)")   # () after ()
+    
   
     # error inputs
     test("")              # blank
