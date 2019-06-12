@@ -128,6 +128,11 @@ def checkTokenOrder(tokens):
         print('Input Error: This formula ends with operator.')
         return True
 
+    # If the number of '(' and ')' are not same
+    if not tokens.count(makeToken('LEFT')) == tokens.count(makeToken('RIGHT'))
+        print('Input Error: There is a missing curly bracket')
+        return True
+
 def getType(token):
     return token['type']
 
