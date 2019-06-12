@@ -239,8 +239,8 @@ def calculate(formula, operations):
 
     return formula
 
-
-def calculate1(formula):
+# Do * / first and + - second
+def twoStageCalculation(formula):
     # Multiplication and division
     formula = calculate(formula, ['TIMES', 'DIVIDE'])
     
@@ -262,7 +262,7 @@ def evaluate(tokens):
             index = lookNext(index)
             
         # Calculate inside of the brackets
-        result = calculate1(tokens[lastLeftIndex + 1 : index])
+        result = twoStageCalculation(tokens[lastLeftIndex + 1 : index])
 
         # Delete from ( to )
         del tokens[lastLeftIndex : index + 1]
@@ -271,7 +271,7 @@ def evaluate(tokens):
         tokens[lastLeftIndex:lastLeftIndex] = result
     
     # Calculate with no brackets
-    tokens = calculate1(tokens)
+    tokens = twoStageCalculation(tokens)
     
     # Finally remained is answer
     return getNumber(tokens[0])
