@@ -238,7 +238,7 @@ def checkTokenError(tokens):
 
     # If the number of '(' and ')' are not same
     if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT')):
-        print('Input Error: There is a missing curly bracket')
+        print('Input Error: There is a missing curly bracket.')
         return True
 
     # If there is ')' before '('
