@@ -128,19 +128,23 @@ def checkTokenOrder(tokens):
         print('Input Error: This formula ends with operator.')
         return True
 
+    leftBracket = typeToToken('LEFT')
+    rightBracket = typeToToken('RIGHT')
+
     # If the number of '(' and ')' are not same
-    if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT'))
+    if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT')):
         print('Input Error: There is a missing curly bracket')
         return True
 
-    firstLeftIndex = tokens.index(typeToToken('LEFT'))
-    firstRightIndex = tokens.index(typeToToken('RIGHT'))
-    lastLeftIndex = len(tokens) - 1 - tokens[::-1].index(typeToToken('LEFT'))
-    lastRightIndex = len(tokens) - 1 - tokens[::-1].index(typeToToken('RIGHT'))
+    if leftBracket in tokens and rightBracket in tokens:
+        firstLeftIndex = tokens.index(leftBracket)
+        firstRightIndex = tokens.index(rightBracket)
+        lastLeftIndex = len(tokens) - 1 - tokens[::-1].index(leftBracket)
+        lastRightIndex = len(tokens) - 1 - tokens[::-1].index(rightBracket)
 
-    if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
-        print('Input Error: Strange order of curly brackets.')
-        return True
+        if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
+            print('Input Error: Strange order of curly brackets.')
+            return True
 
 
     return False
