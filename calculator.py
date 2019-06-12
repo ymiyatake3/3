@@ -151,9 +151,9 @@ def tokenize(line):
             (token, index) = readTimes(line, index)
         elif line[index] == '/':
             (token, index) = readDivide(line, index)
-        elif line[index] == '('
+        elif line[index] == '(':
             (token, index) = readLeftBracket(line, index)
-        elif line[index] == ')'
+        elif line[index] == ')':
             (token, index) = readRightBracket(line, index)
         
         tokens.append(token)
@@ -176,7 +176,7 @@ def binaryOperation(operator, num1, num2):
     return result
 
 
-def calculate(formula, types)
+def calculate(formula, types):
     index = 0
     while index < len(formula):
         type = getType(formula[index])
@@ -187,10 +187,10 @@ def calculate(formula, types)
             # Delete the calculated part (ex: 2, *, 3)
             del formula[index - 1 : index + 2]
                 
-                # Insert the result instead (ex: 6)
-                tokens.insert(index - 1, makeNumToken(result))
-            else:
-                index = lookNext(index)
+            # Insert the result instead (ex: 6)
+            formula.insert(index - 1, makeNumToken(result))
+        else:
+            index = lookNext(index)
 
     return formula
 
