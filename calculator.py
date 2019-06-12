@@ -69,7 +69,14 @@ def checkErrorInput(line):
     for c in line:
         # If c is not number and not correct operator
         if (not c.isdigit()) and (c not in acceptedChars):
-            print('Invalid character found: ' + c)
+            print('Input Error: Invalid character found -> ' + c)
+            return True
+
+    if '..' in line:
+        print('Input Error: Invalid number.')
+        return True
+    
+    return False
 
 
 # Check if the tokens are in correct order (number and operator take turns)
