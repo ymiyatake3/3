@@ -73,17 +73,23 @@ def isOperator(token):
     else:
         return True
 
+# Return the index that element appears at last
+def lastIndex(l, element):
+    return len(l) - 1 - l[::-1].index(element)
+
+
+# ---------- Error handling start ---------------
 # Detect errors before tokenize
 def checkCharacterError(line):
     
     # If there is character that is not a number and not a correct operator
     acceptedChars = ['+', '-', '*', '/', '.', '(', ')']
-    errors = []
+    errorChars = []
     for c in line:
         if (not c.isdigit()) and (c not in acceptedChars):
-            errors.append(c)
-    if errors:
-        print('Input Error: Invalid character found -> ' + ''.join(errors))
+            errorChars.append(c)
+    if errorChars:
+        print('Input Error: Invalid character found -> ' + ''.join(errorChars))
         return True
 
 
@@ -100,18 +106,13 @@ def checkCharacterError(line):
     return False
 
 
-# Return the index that element appears at last
-def lastIndex(l, element):
-    return len(l) - 1 - l[::-1].index(element)
-
-
 # Detect errors after tokenize
 def checkTokenError(tokens):
     
     leftBracket = typeToToken('LEFT')
     rightBracket = typeToToken('RIGHT')
     
-    #---Errors of bracket places---
+    ## Errors of bracket places
 
     # If the number of '(' and ')' are not same
     if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT')):
@@ -125,13 +126,12 @@ def checkTokenError(tokens):
         lastLeftIndex = lastIndex(tokens, leftBracket)
         lastRightIndex = lastIndex(tokens, rightBracket)
 
-
         if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
             print('Input Error: Strange order of curly brackets.')
             return True
 
 
-    #---Errors of operators---
+    ## Errors of operators
 
     # If the first token is '-', insert 0 on the top.
     if getType(tokens[0]) == 'MINUS':
@@ -169,6 +169,8 @@ def checkTokenError(tokens):
 
 
     return False
+
+# ---------- Error handling end ---------------
 
 
 def getType(token):
