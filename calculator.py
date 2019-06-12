@@ -12,8 +12,6 @@ def makeToken(type):
     token = {'type': type}
     return token
 
-def makeBracketToken(LR):
-    token = {'type': 'BRACKET', 'LR': LR}
 
 
 # Define the token of each input characters
@@ -59,17 +57,18 @@ def readDivide(line, index):
     return token, lookNext(index)
 
 def readLeftBracket(line, index):
-    token = makeBracketToken('Left')
+    token = makeToken('LEFT')
     return token, lookNext(index)
 
 def readRightBracket(line, index):
-    token = makeBracketToken('Right')
+    token = makeToken('RIGHT')
     return token, lookNext(index)
 
 #-----------------------------
 
 def isOperator(token):
-    if token['type'] == 'NUMBER':
+    type = getType(token)
+    if type == 'NUMBER' or type == 'LEFT' or type == 'RIGHT':
         return False
     else:
         return True
@@ -98,6 +97,7 @@ def checkErrorInput(line):
         print('Input Error: Invalid number.')
         return True
     
+    if
     
     return False
 
@@ -176,7 +176,7 @@ def tokenize(line):
     return tokens
 
 
-# Get the answer from the list of tokens
+# Get an answer from the list of tokens
 def evaluate(tokens):
     answer = 0
     
