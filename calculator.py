@@ -102,6 +102,11 @@ def checkCharacterError(line):
     if line[0] == '.' or ('.' in line and not line[line.index('.') - 1].isdigit()):
         print('Input Error: Invalid number.')
         return True
+
+    # If there is '()'
+    if '()' in line:
+        print('Input Error: No value in brackets.')
+        return True
     
     return False
 
@@ -125,10 +130,12 @@ def checkTokenError(tokens):
         firstRightIndex = tokens.index(rightBracket)
         lastLeftIndex = lastIndex(tokens, leftBracket)
         lastRightIndex = lastIndex(tokens, rightBracket)
-
+        
         if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
             print('Input Error: Strange order of curly brackets.')
             return True
+
+
 
 
     ## Errors of operators
@@ -220,7 +227,7 @@ def binaryOperation(operator, num1, num2):
     
     return result
 
-# Do calculation of the operations in argument 'operations'
+# Do calculation of the specified operations
 def calculate(formula, operations):
     index = 0
     while index < len(formula):
@@ -239,12 +246,13 @@ def calculate(formula, operations):
 
     return formula
 
-# Do * / first and + - second
+
 def twoStageCalculation(formula):
-    # Multiplication and division
+    
+    # * and /
     formula = calculate(formula, ['TIMES', 'DIVIDE'])
     
-    # Addition and subtraction
+    # + and -
     formula = calculate(formula, ['PLUS', 'MINUS'])
 
     return formula
@@ -264,7 +272,7 @@ def evaluate(tokens):
         # Calculate inside of the brackets
         result = twoStageCalculation(tokens[lastLeftIndex + 1 : index])
 
-        # Delete from ( to )
+        # Delete from '(' to ')'
         del tokens[lastLeftIndex : index + 1]
         
         # Insert result token instead
@@ -353,8 +361,9 @@ def runTest():
     test("a")
     test("32+a+b+c")
     test("()")              # Only bracket
-    test("(1+1))")          # The numbers of left and right are different
+    test("(1+1))")          # The numbers of left and right brackets are different
     test(")1+1(")           # Numbers are same but not starts with (
+    test("(1+1))(")         # Start with ( but not end with )
   
     print("==== Test finished! ====\n")
 
