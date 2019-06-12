@@ -3,12 +3,12 @@ def lookNext(index):
     return index + 1
 
 # Make a number token
-def makeNumToken(number):
+def numToToken(number):
     token = {'type': 'NUMBER', 'number': number}
     return token
 
 # Make an other token
-def makeToken(type):
+def typeToToken(type):
     token = {'type': type}
     return token
 
@@ -37,31 +37,31 @@ def readNumber(line, index):
             index = lookNext(index)
 
     # Set the token type
-    token = makeNumToken(number)
+    token = numToToken(number)
     return token, index
 
 def readPlus(line, index):
-    token = makeToken('PLUS')
+    token = typeToToken('PLUS')
     return token, lookNext(index)
 
 def readMinus(line, index):
-    token = makeToken('MINUS')
+    token = typeToToken('MINUS')
     return token, lookNext(index)
 
 def readTimes(line, index):
-    token = makeToken('TIMES')
+    token = typeToToken('TIMES')
     return token, lookNext(index)
 
 def readDivide(line, index):
-    token = makeToken('DIVIDE')
+    token = typeToToken('DIVIDE')
     return token, lookNext(index)
 
 def readLeftBracket(line, index):
-    token = makeToken('LEFT')
+    token = typeToToken('LEFT')
     return token, lookNext(index)
 
 def readRightBracket(line, index):
-    token = makeToken('RIGHT')
+    token = typeToToken('RIGHT')
     return token, lookNext(index)
 
 #-----------------------------
@@ -106,13 +106,13 @@ def checkTokenOrder(tokens):
     # If the first token is '-'
     if getType(tokens[0]) == 'MINUS':
         # Insert 0 befere the '-'
-        tokens.insert(0, makeNumToken(0))
+        tokens.insert(0, numToToken(0))
     
     # If the input is only a number
     if len(tokens) == 1 and getType(tokens[0]) == 'NUMBER':
         # Insert +0 after the number
-        tokens.append(makeToken('PLUS'))
-        tokens.append(makeNumToken(0))
+        tokens.append(typeToToken('PLUS'))
+        tokens.append(numToToken(0))
     
     # Check the order
     index = 0
@@ -129,7 +129,7 @@ def checkTokenOrder(tokens):
         return True
 
     # If the number of '(' and ')' are not same
-    if not tokens.count(makeToken('LEFT')) == tokens.count(makeToken('RIGHT'))
+    if not tokens.count(typeToToken('LEFT')) == tokens.count(typeToToken('RIGHT'))
         print('Input Error: There is a missing curly bracket')
         return True
 
@@ -193,7 +193,7 @@ def calculate(formula, types):
             del formula[index - 1 : index + 2]
                 
             # Insert the result instead (ex: 6)
-            formula.insert(index - 1, makeNumToken(result))
+            formula.insert(index - 1, numToToken(result))
         else:
             index = lookNext(index)
 
