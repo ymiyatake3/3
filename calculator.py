@@ -143,11 +143,15 @@ def checkTokenOrder(tokens):
         tokens.append(numToToken(0))
     
     # Delete ()
-    # Not to remove the () in tokens
     tokensCopy = tokens.copy()
-    for token in tokensCopy:
+    index = 0
+    while index < len(tokensCopy):
+        token = tokensCopy[index]
         if token == leftBracket or token == rightBracket:
-            tokensCopy.remove(token)
+            del tokensCopy[index]
+        else:
+            index = lookNext(index)
+
 
     # Check the order
     index = 0
