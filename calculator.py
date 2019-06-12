@@ -251,7 +251,7 @@ def evaluate(tokens):
             
             tokens.insert(lastLeftIndex, result)
     
-    calculate1(tokens)
+    answer = calculate1(tokens)
 
     return answer
 
