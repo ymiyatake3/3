@@ -73,7 +73,7 @@ def isOperator(token):
     else:
         return True
 
-# Check if there is strange character
+# Check if there is a strange character
 def checkErrorInput(line):
     
     # If there is character that is not a number and not a correct operator
@@ -99,8 +99,10 @@ def checkErrorInput(line):
     
     return False
 
-def lastIndex(list, element):
-    return len(list) - 1 - list[::-1].index(element)
+
+# Return the index that element appears at last
+def lastIndex(l, element):
+    return len(l) - 1 - l[::-1].index(element)
 
 
 # Check if the tokens are in correct order (number and operator take turns)
@@ -142,22 +144,22 @@ def checkTokenOrder(tokens):
     
     # Delete ()
     # Not to remove the () in tokens
-    copy = tokens.copy()
-    for token in copy:
+    tokensCopy = tokens.copy()
+    for token in tokensCopy:
         if token == leftBracket or token == rightBracket:
-            copy.remove(token)
+            tokensCopy.remove(token)
 
     # Check the order
     index = 0
-    while index < len(copy) - 1:
-        if isOperator(copy[index]) == isOperator(copy[index + 1]):
+    while index < len(tokensCopy) - 1:
+        if isOperator(tokensCopy[index]) == isOperator(tokensCopy[index + 1]):
             print('Input Error: There are operators next to each other.')
             return True
             
         index = lookNext(index)
 
     # If the last token is operator
-    if isOperator(copy[len(copy) - 1]):
+    if isOperator(tokensCopy[len(tokensCopy) - 1]):
         print('Input Error: This formula ends with operator.')
         return True
 
@@ -239,37 +241,33 @@ def calculate1(formula):
     # Addition and subtraction
     formula = calculate(formula, ['PLUS', 'MINUS'])
 
-    # Finally remained value is the answer
-    answer = getNumber(formula[0])
-
-    return answer
+    return formula
 
 
 # Get an answer from the list of tokens
 def evaluate(tokens):
     answer = 0
 
+    # Inside of the brackets
     while typeToToken('LEFT') in tokens:
         lastLeftIndex = lastIndex(tokens, typeToToken('LEFT'))
         index = lastLeftIndex + 1
-        while not getType(tokens(index)) == 'RIGHT':
+        while not getType(tokens[index]) == 'RIGHT':
             index = lookNext(index)
             
         # Calculate inside of the brackets
         result = calculate1(tokens[lastLeftIndex + 1 : index])
-            
+
         # Delete from ( to )
         del tokens[lastLeftIndex : index + 1]
             
-        tokens.insert(lastLeftIndex, result)
-
-    #print(tokens)
+        tokens[lastLeftIndex:lastLeftIndex] = result
     
-    answer = calculate1(tokens)
+    # Without brackets
+    tokens = calculate1(tokens)
     
-    #print(tokens)
-    
-    return answer
+    # Finally remained is answer
+    return getNumber(tokens[0])
 
 
 # Return if the calculated answer is true or false
@@ -327,7 +325,8 @@ def runTest():
     test("1.5+1")       # decimal number & integer
     
     # with brackets
-    test("(1+1)")           # simple ()
+    test("(1)")             # simple ()
+    test("(1+1)")
     test("2*(1+1)")         # calculation order change
     test("2*(1+1)/2")       # calculation after ()
     test("1+(1+(1+1))")     # nest
@@ -363,9 +362,7 @@ while True:
     if checkErrorInput(line):
         continue
     tokens = tokenize(line)
-    print(tokens)
     if checkTokenOrder(tokens):
         continue
-    print(tokens)
     answer = evaluate(tokens)
     print("answer = %f\n" % answer)
