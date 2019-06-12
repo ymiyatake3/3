@@ -73,7 +73,7 @@ def isOperator(token):
     else:
         return True
 
-# Check if there is a strange character
+# Detect errors before tokenize
 def checkCharacterError(line):
     
     # If there is character that is not a number and not a correct operator
@@ -105,7 +105,7 @@ def lastIndex(l, element):
     return len(l) - 1 - l[::-1].index(element)
 
 
-# Check if the tokens are in correct order (number and operator take turns)
+# Detect errors after tokenize
 def checkTokenError(tokens):
     
     leftBracket = typeToToken('LEFT')
