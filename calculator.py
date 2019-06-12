@@ -100,8 +100,7 @@ def checkErrorInput(line):
     return False
 
 def lastIndex(list, element):
-    index = len(list) - 1 - list[::-1].index(element)
-    return index
+    return len(list) - 1 - list[::-1].index(element)
 
 
 # Check if the tokens are in correct order (number and operator take turns)
@@ -142,21 +141,23 @@ def checkTokenOrder(tokens):
         tokens.append(numToToken(0))
     
     # Delete ()
-    for token in tokens:
+    # Not to remove the () in tokens
+    copy = tokens.copy()
+    for token in copy:
         if token == leftBracket or token == rightBracket:
-            tokens.remove(token)
+            copy.remove(token)
 
     # Check the order
     index = 0
-    while index < len(tokens) - 1:
-        if isOperator(tokens[index]) == isOperator(tokens[index + 1]):
+    while index < len(copy) - 1:
+        if isOperator(copy[index]) == isOperator(copy[index + 1]):
             print('Input Error: There are operators next to each other.')
             return True
             
         index = lookNext(index)
 
     # If the last token is operator
-    if isOperator(tokens[len(tokens) - 1]):
+    if isOperator(copy[len(copy) - 1]):
         print('Input Error: This formula ends with operator.')
         return True
 
@@ -193,7 +194,7 @@ def tokenize(line):
             (token, index) = readRightBracket(line, index)
         
         tokens.append(token)
-    
+
     return tokens
 
 
@@ -247,23 +248,27 @@ def calculate1(formula):
 # Get an answer from the list of tokens
 def evaluate(tokens):
     answer = 0
-    
+
     while typeToToken('LEFT') in tokens:
         lastLeftIndex = lastIndex(tokens, typeToToken('LEFT'))
         index = lastLeftIndex + 1
         while not getType(tokens(index)) == 'RIGHT':
             index = lookNext(index)
             
-            # Calculate inside of the brackets
-            result = calculate1(tokens[lastLeftIndex + 1 : index])
+        # Calculate inside of the brackets
+        result = calculate1(tokens[lastLeftIndex + 1 : index])
             
-            # Delete from ( to )
-            del tokens[lastLeftIndex : index + 1]
+        # Delete from ( to )
+        del tokens[lastLeftIndex : index + 1]
             
-            tokens.insert(lastLeftIndex, result)
+        tokens.insert(lastLeftIndex, result)
+
+    #print(tokens)
     
     answer = calculate1(tokens)
-
+    
+    #print(tokens)
+    
     return answer
 
 
@@ -325,7 +330,7 @@ def runTest():
     test("(1+1)")           # simple ()
     test("2*(1+1)")         # calculation order change
     test("2*(1+1)/2")       # calculation after ()
-    test("1+(1+(1+1))")     # () in ()
+    test("1+(1+(1+1))")     # nest
     test("2*(1+1)*(1+1)")   # () after ()
     
   
@@ -358,7 +363,9 @@ while True:
     if checkErrorInput(line):
         continue
     tokens = tokenize(line)
+    print(tokens)
     if checkTokenOrder(tokens):
         continue
+    print(tokens)
     answer = evaluate(tokens)
     print("answer = %f\n" % answer)
