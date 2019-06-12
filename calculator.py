@@ -264,10 +264,11 @@ def evaluate(tokens):
 
         # Delete from ( to )
         del tokens[lastLeftIndex : index + 1]
-            
+        
+        # Insert result token instead
         tokens[lastLeftIndex:lastLeftIndex] = result
     
-    # Without brackets
+    # Calculate with no brackets
     tokens = calculate1(tokens)
     
     # Finally remained is answer
