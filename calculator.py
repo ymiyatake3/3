@@ -100,7 +100,8 @@ def checkErrorInput(line):
     return False
 
 def lastIndex(list, element):
-    len(list) - 1 - list[::1].index(element)
+    index = len(list) - 1 - list[::-1].index(element)
+    return index
 
 
 # Check if the tokens are in correct order (number and operator take turns)
@@ -122,6 +123,7 @@ def checkTokenOrder(tokens):
         firstRightIndex = tokens.index(rightBracket)
         lastLeftIndex = lastIndex(tokens, leftBracket)
         lastRightIndex = lastIndex(tokens, rightBracket)
+
 
         if not (firstLeftIndex < firstRightIndex and lastLeftIndex < lastRightIndex):
             print('Input Error: Strange order of curly brackets.')
